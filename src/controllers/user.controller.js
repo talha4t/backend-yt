@@ -7,6 +7,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
         const user = await User.findById(userId);
+        if (!user) {
+            throw new ApiError(400, "user is not define");
+        }
+
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
 
@@ -15,6 +19,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
         return {accessToken, refreshToken};
     } catch (error) {
+        console.log(error);
         throw new ApiError(500, "something went wrong while generating refresh & access token");
     }
 };
